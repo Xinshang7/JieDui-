@@ -12,16 +12,7 @@ public class Question {
         int nature = rd.nextInt(max);
         int denominator = rd.nextInt(max-1)+1;
         int numerator = rd.nextInt(denominator);
-        if (nature == 0) {
-            return numerator+"/"+denominator;
-        } else if (denominator == 1 || numerator == 0) {
-            return String.valueOf(nature);
-        }else {
-            int d = CountUtil.divisor(numerator,denominator);
-            numerator /= d;
-            denominator /= d;
-            return nature+"'"+numerator+"/"+denominator;
-        }
+        return CountUtil.name2(nature+"'"+numerator+"/"+denominator);
     }
 
     /**
@@ -30,7 +21,7 @@ public class Question {
      * @return 表达式
      */
     public static String setQuestion(int max){
-        //运算符个数
+        /*//运算符个数
         int n = rd.nextInt(3)+1;
         //存储运算符
         char[] operator = new char[n];
@@ -69,7 +60,46 @@ public class Question {
                 return ranNum(max)+" "+operator[0]+" "+ranNum(max)+" "+operator[1]+" "+ranNum(max)
                         +" "+operator[2]+" "+ranNum(max)+" "+"=";
             }
+        }*/
+        int n = rd.nextInt(3)+1;
+        StringBuffer sb = new StringBuffer();
+
+        boolean bracket = false;
+        int k = 0;
+        for (int i=0; i<=n; i++) {
+            if (i != 0) {
+                sb.append(" ");
+            }
+
+            if (rd.nextDouble() < 0.5 && bracket == false && i != n) {
+                sb.append("(");
+                bracket = true;
+                k=i;
+            }
+
+            sb.append(ranNum(max));
+
+            if (i != n && rd.nextDouble() < 0.5 && bracket == true && k != i) {
+                sb.append(")");
+                bracket = false;
+            }
+
+            if (i == n && bracket == true  && k != i) {
+                if (k == 0) {
+                    sb = sb.deleteCharAt(0);
+                }
+                else {
+                    sb.append(")");
+                }
+            }
+
+            sb.append(" ");
+            if (i != n) {
+                sb.append(symbol[rd.nextInt(4)]);
+            }
         }
+        sb.append("=");
+        return sb.toString();
     }
 
 
@@ -79,6 +109,8 @@ public class Question {
             String str = setQuestion(10);
             System.out.println(str);
             System.out.println(Answer.rePolish(str));
+            System.out.println(Answer.calculate(Answer.rePolish(str)));
         }
+
     }
 }

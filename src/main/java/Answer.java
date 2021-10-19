@@ -24,7 +24,6 @@ public class Answer {
                 if (num.charAt(i) != c) {
                     n++;
                 } else {
-                    n++;
                     break;
                 }
             }
@@ -35,9 +34,6 @@ public class Answer {
             } else if (!s1.empty()){
                 if(priority.get(s1.peek())<priority.get(num.charAt(i))){
                     s1.push(num.charAt(i));
-                } else if (priority.get(s1.peek())>=priority.get(num.charAt(i))){
-                    s2.push(s1.pop());
-                    s1.push(num.charAt(i));
                 } else if (num.charAt(i) == '('){
                     s1.push(num.charAt(i));
                 } else if (num.charAt(i) == ')'){
@@ -45,38 +41,52 @@ public class Answer {
                         s2.push(s1.pop());
                     }
                     s1.pop();
+                } else if (priority.get(s1.peek())>=priority.get(num.charAt(i))){
+                    s2.push(s1.pop());
+                    s1.push(num.charAt(i));
                 }
             }
             n=0;
         }
         while (!s1.empty()){
+            s2.push(' ');
             s2.push(s1.pop());
         }
         StringBuffer sb = new StringBuffer();
         while (!s2.empty()){
             sb.append(s2.pop());
         }
-        return String.valueOf(sb.reverse());
+        return String.valueOf(sb.reverse()+" ");
     }
 
-    public static void calculate(String polish){
+    public static String calculate(String repolish){
         Stack<String> s = new Stack<>();
         StringBuffer sb = new StringBuffer();
-        sb.append(polish);
-        while ("".equals(sb)) {
-            while (sb.charAt(0) == ' ') {
+        sb.append(repolish);
+        while (sb.length()!=0) {
+
+
+            if(sb.charAt(0) == ' ') {
                 sb.delete(0,1);
+                continue;
             }
-            switch (sb.substring(0,sb.indexOf(" "))){
-                case "+":;
-                case "-":;
-                case "×":;
-                case "÷":;
-                default:s.push(sb.substring(0,sb.indexOf(" ")));
+
+
+
+            if (sb.substring(0, sb.indexOf(" ")).equals("+") || sb.substring(0, sb.indexOf(" ")).equals("-")
+                    || sb.substring(0, sb.indexOf(" ")).equals("×") || sb.substring(0, sb.indexOf(" ")).equals("÷")){
+                String num2 = s.pop();
+                String num1 = s.pop();
+
+
+
+                s.push(CountUtil.countNum(num1,num2,sb.substring(0,sb.indexOf(" "))));
+            }else {
+                s.push(sb.substring(0,sb.indexOf(" ")));
             }
             sb.delete(0,sb.indexOf(" "));
-
         }
+        return s.pop();
     }
 
 }
