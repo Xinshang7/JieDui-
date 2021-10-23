@@ -105,7 +105,8 @@ public class CheckUtil {
                     }
                     // 两个括号整体交换
                     // 例：1 2 + 3 4 + + 和 4 3 + 2 1 + +
-                    else if ( isExchange(arrayList_1, 2, arrayList_2, 5) ) {
+                    // 当原式中间运算符为 - 或 ÷，两个括号整体不允许交换
+                    else if ( isExchange(arrayList_1, 2, arrayList_2, 5) && arrayList_1.get(6).equals("-") && arrayList_1.get(6).equals("÷")) {
                         return isExchange(arrayList_1, 5, arrayList_2, 2);
                     }
                     else return false;
