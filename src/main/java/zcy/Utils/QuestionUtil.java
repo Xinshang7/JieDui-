@@ -21,42 +21,46 @@ public class QuestionUtil {
      * @return 表达式
      */
     public static String setExpression(int max){
-        int n = rd.nextInt(3)+1;
+        int n = rd.nextInt(3)+1; // 多少个运算符
         StringBuffer sb = new StringBuffer();
-        boolean bracket = false;
-        int k = 0;
+        boolean bracket = false; // 判断添加左括号还是右括号
+        int k = 0; // 添加左括号的下标
         for (int i=0; i<=n; i++) {
+            // 式子开始没空格
             if (i != 0) {
                 sb.append(" ");
             }
-
+            // 生成左括号
             if (rd.nextDouble() < 0.5 && !bracket && i != n) {
-                sb.append("(");
-                sb.append(" ");
+                sb.append("( ");
                 bracket = true;
                 k=i;
             }
+            // 生成随机数
             sb.append(ranNum(max));
-            if (i != n && rd.nextDouble() < 0.5 && bracket && k != i) {
-                sb.append(" "+")");
-                bracket = false;
-            }
-            if (i == n && bracket  && k != i) {
-                if (k == 0) {
-                    sb.delete(0, 2);
+            // 生成右括号
+            if (bracket && k != i) {
+                if (i != n) {
+                    if ( rd.nextDouble() < 0.5) {
+                        sb.append(" )");
+                        bracket = false;
+                    }
+                } else {
+                    if (k == 0) {
+                        // 去除 ( 1 + 2 + 3 ) = 这种给整个式子添加括号的情况
+                        sb.delete(0, 2);
+                    }
+                    else {
+                        sb.append(" )");
+                    }
                 }
-                else {
-                    sb.append(" ");
-                    sb.append(")");
-                }
             }
-
-            sb.append(" ");
+            // 生成运算符
             if (i != n) {
-                sb.append(symbol[rd.nextInt(4)]);
+                sb.append(" "+symbol[rd.nextInt(4)]);
             }
         }
-        sb.append("=");
+        sb.append(" =");
         return sb.toString();
     }
 
